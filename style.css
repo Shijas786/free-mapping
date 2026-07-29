@@ -149,6 +149,13 @@ html, body {
   background: rgba(99,102,241,0.06);
 }
 
+/* ── Right sidebar Media Bin panel ─────────────────────────────────────────── */
+#properties-panel {
+  display: flex !important;
+  flex-direction: column;
+  flex: 1;
+}
+
 /* ── Side Panels ────────────────────────────────────────────────────────────── */
 .side-panel {
   display: flex;
@@ -1210,7 +1217,72 @@ input[type="color"].source-color-input {
   display: none;
 }
 
-/* ── Beginner Playground Panel ─────────────────────────────────────────────── */
+/* ── MadMapper Media Bin & Inspector Styles ────────────────────────────────── */
+.mbin-cat-header {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--clr-text-muted);
+  padding: 4px 0;
+  margin-bottom: 4px;
+}
+
+.mbin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.mbin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mbin-item-btn {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  transition: all var(--dur-fast);
+}
+.mbin-list .mbin-item-btn {
+  flex-direction: row;
+  text-align: left;
+}
+
+.mbin-item-btn:hover, .mbin-item-btn.active {
+  border-color: var(--clr-accent);
+  background: rgba(99,102,241,0.15);
+}
+
+.mbin-thumb {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 4px;
+}
+.mbin-list .mbin-thumb {
+  width: 24px;
+  height: 24px;
+  aspect-ratio: auto;
+}
+
+.mbin-name {
+  font-size: 10px;
+  color: var(--clr-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
 .pg-preset-card {
   display: flex;
   align-items: center;

@@ -20,6 +20,7 @@ import { ScenesPanel } from './ui/scenes-panel';
 import { ShaderEditor } from './ui/shader-editor';
 import { MIDIPanel } from './ui/midi-panel';
 import { ScannerPanel } from './ui/scanner-panel';
+import { MediaBinPanel } from './ui/media-bin';
 
 async function main() {
   // ── Restore autosaved project ──────────────────────────────────────────────
@@ -47,7 +48,7 @@ async function main() {
   new Toolbar(engine);
   new SurfacePanel(engine);
   new LayerPanel(engine);
-  new PropertiesPanel();
+  new MediaBinPanel(engine);
   new EffectsPanel();
   new AudioPanel();
   new OutputPanel(engine);
