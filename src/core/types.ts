@@ -154,9 +154,14 @@ export interface UIState {
   panOffset: Point;
   isFullscreen: boolean;
   maskMode: boolean;
+  viewSpace: 'input' | 'output';
+  masterDimmer: number; // 0-1
+  blackout: boolean;
+  freeze: boolean;
+  masterBpm: number;
 }
 
-export type PanelId = 'surfaces' | 'surface' | 'layer' | 'effects' | 'mesh' | 'mask' | 'scenes' | 'audio' | 'shader' | 'output' | 'midi' | 'scanner' | 'playground';
+export type PanelId = 'surfaces' | 'surface' | 'layer' | 'effects' | 'mesh' | 'mask' | 'scenes' | 'audio' | 'shader' | 'output' | 'midi' | 'scanner';
 
 // ─── Events ───────────────────────────────────────────────────────────────────
 

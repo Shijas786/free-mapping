@@ -25,6 +25,34 @@ export class Toolbar {
       </div>
 
       <div class="toolbar-center">
+        <!-- Dual Space Toggle: Input Space vs Output Space -->
+        <div class="toolbar-group">
+          <button id="btn-space-input"  class="tb-btn ${store.ui.viewSpace === 'input' ? 'active' : ''}" title="Input Media Crop Space">◨ Input</button>
+          <button id="btn-space-output" class="tb-btn ${store.ui.viewSpace === 'output' ? 'active' : ''}" title="Warp Output Space">◩ Output</button>
+        </div>
+
+        <div class="toolbar-sep"></div>
+
+        <!-- Master Performance Controls -->
+        <div class="toolbar-group">
+          <button id="btn-blackout" class="tb-btn ${store.ui.blackout ? 'active danger' : ''}" title="Master Blackout">⬛ Blackout</button>
+          <button id="btn-freeze"   class="tb-btn ${store.ui.freeze ? 'active' : ''}" title="Master Freeze Frame">❄️ Freeze</button>
+          <div class="toolbar-dimmer-wrap" style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--clr-text-muted)">
+            <span>Dim:</span>
+            <input type="range" id="master-dimmer-slider" min="0" max="1" step="0.05" value="${store.ui.masterDimmer}" style="width:50px;height:3px">
+          </div>
+        </div>
+
+        <div class="toolbar-sep"></div>
+
+        <!-- Master BPM & Tap Tempo -->
+        <div class="toolbar-group" style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:10px;font-family:var(--font-mono);color:var(--clr-accent-2)" id="bpm-display">${store.ui.masterBpm} BPM</span>
+          <button id="btn-tap-tempo" class="tb-btn" style="font-size:9.5px;padding:2px 6px">TAP</button>
+        </div>
+
+        <div class="toolbar-sep"></div>
+
         <div class="toolbar-group">
           <button id="btn-undo"  class="tb-btn" title="Undo (Ctrl+Z)">
             <svg viewBox="0 0 20 20"><path d="M4 7h8a5 5 0 010 10H8" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><polyline points="4,3 4,7 8,7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
@@ -69,6 +97,43 @@ export class Toolbar {
 
   private bindButtons() {
     const $ = (id: string) => document.getElementById(id);
+
+    $('btn-space-input')?.addEventListener('click', () => {
+      store.setUI({ viewSpace: 'input' });
+    });
+
+    $('btn-space-output')?.addEventListener('click', () => {
+      store.setUI({ viewSpace: 'output' });
+    });
+
+    $('btn-blackout')?.addEventListener('click', () => {
+      store.setUI({ blackout: !store.ui.blackout });
+    });
+
+    $('btn-freeze')?.addEventListener('click', () => {
+      store.setUI({ freeze: !store.ui.freeze });
+    });
+
+    const dimmerSlider = $('master-dimmer-slider') as HTMLInputElement | null;
+    dimmerSlider?.addEventListener('input', () => {
+      store.setUI({ masterDimmer: parseFloat(dimmerSlider.value) });
+    });
+
+    let tapTimes: number[] = [];
+    $('btn-tap-tempo')?.addEventListener('click', () => {
+      const now = performance.now();
+      tapTimes.push(now);
+      if (tapTimes.length > 8) tapTimes.shift();
+      if (tapTimes.length >= 2) {
+        const intervals = [];
+        for (let i = 1; i < tapTimes.length; i++) intervals.push(tapTimes[i] - tapTimes[i - 1]);
+        const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+        const bpm = Math.round(60000 / avg);
+        store.setUI({ masterBpm: bpm });
+        const disp = $('bpm-display');
+        if (disp) disp.textContent = `${bpm} BPM`;
+      }
+    });
 
     $('btn-undo')?.addEventListener('click', () => this.undo());
     $('btn-redo')?.addEventListener('click', () => this.redo());
@@ -131,6 +196,11 @@ export class Toolbar {
     const redoBtn = document.getElementById('btn-redo');
     if (undoBtn) undoBtn.toggleAttribute('disabled', !history.canUndo());
     if (redoBtn) redoBtn.toggleAttribute('disabled', !history.canRedo());
+
+    document.getElementById('btn-space-input')?.classList.toggle('active', store.ui.viewSpace === 'input');
+    document.getElementById('btn-space-output')?.classList.toggle('active', store.ui.viewSpace === 'output');
+    document.getElementById('btn-blackout')?.classList.toggle('active', store.ui.blackout);
+    document.getElementById('btn-freeze')?.classList.toggle('active', store.ui.freeze);
 
     document.getElementById('btn-grid')?.classList.toggle('active', store.ui.showGrid);
     document.getElementById('btn-testcard')?.classList.toggle('active', store.ui.showTestCard);

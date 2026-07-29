@@ -83,6 +83,11 @@ function createDefaultUI(): UIState {
     panOffset: { x: 0, y: 0 },
     isFullscreen: false,
     maskMode: false,
+    viewSpace: 'output',
+    masterDimmer: 1.0,
+    blackout: false,
+    freeze: false,
+    masterBpm: 120,
   };
 }
 

@@ -20,7 +20,6 @@ import { ScenesPanel } from './ui/scenes-panel';
 import { ShaderEditor } from './ui/shader-editor';
 import { MIDIPanel } from './ui/midi-panel';
 import { ScannerPanel } from './ui/scanner-panel';
-import { PlaygroundPanel } from './ui/playground-panel';
 
 async function main() {
   // ── Restore autosaved project ──────────────────────────────────────────────
@@ -58,7 +57,6 @@ async function main() {
   new ShaderEditor();
   new MIDIPanel();
   new ScannerPanel(engine);
-  new PlaygroundPanel(engine);
 
   // ── Panel tab navigation ───────────────────────────────────────────────────
   const activateTab = (panelId: string) => {

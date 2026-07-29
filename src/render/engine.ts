@@ -301,8 +301,21 @@ export class RenderEngine {
     const H = this.canvas.height;
     this.ensureFBOs(W, H);
 
+    // Blackout control
+    if (store.ui.blackout) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, W, H);
+      gl.clearColor(0, 0, 0, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      return;
+    }
+
+    // Freeze frame control
+    if (store.ui.freeze) return;
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, W, H);
+    gl.clearColor(0.031 * store.ui.masterDimmer, 0.031 * store.ui.masterDimmer, 0.063 * store.ui.masterDimmer, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     for (const surface of store.project.surfaces) {
