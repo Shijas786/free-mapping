@@ -10,10 +10,10 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 
 export class EffectsPanel {
-  private el: HTMLElement;
+  private el: HTMLElement | null = null;
 
   constructor() {
-    this.el = document.getElementById('effects-panel')!;
+    this.el = document.getElementById('effects-panel') || document.getElementById('fx-chain-list') || document.getElementById('rp-fx') || null;
     if (!this.el) return;
     this.render();
     store.bus.on('LAYER_UPDATED',   () => this.render());
@@ -22,6 +22,7 @@ export class EffectsPanel {
   }
 
   private render() {
+    if (!this.el) return;
     const layerId = store.ui.selectedLayerId;
     const layer   = layerId ? store.project.layers.find((l) => l.id === layerId) : null;
 

@@ -150,14 +150,76 @@ async function main() {
 
   // ── Keyboard shortcuts ─────────────────────────────────────────────────────
   window.addEventListener('keydown', (e) => {
-    if (e.ctrlKey || e.metaKey) return; // handled by toolbar
+    if (e.ctrlKey || e.metaKey) return; // handled by toolbar or browser
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-    if (e.key === 'm' || e.key === 'M') {
-      // M key — toggle mask mode (MaskPanel handles its own visibility)
+
+    // Hotkeys
+    switch (e.key) {
+      case ' ':
+        e.preventDefault();
+        document.getElementById('btn-play-pause')?.click();
+        break;
+      case 'b':
+      case 'B':
+        document.getElementById('btn-blackout')?.click();
+        break;
+      case 'f':
+      case 'F':
+        document.getElementById('btn-freeze')?.click();
+        break;
+      case 'g':
+      case 'G':
+        document.getElementById('btn-grid')?.click();
+        break;
+      case 't':
+      case 'T':
+        document.getElementById('btn-testcard')?.click();
+        break;
+      case '1':
+        document.getElementById('tool-quad')?.click();
+        break;
+      case '2':
+        document.getElementById('tool-mesh')?.click();
+        break;
+      case '3':
+        document.getElementById('tool-bezier')?.click();
+        break;
+      case '4':
+        document.getElementById('tool-3d')?.click();
+        break;
+      case 'Delete':
+      case 'Backspace': {
+        const sId = store.ui.selectedSurfaceId;
+        if (sId && store.ui.selectedPointIndex === null) {
+          if (confirm('Delete selected surface?')) {
+            history.push(store.project);
+            store.removeSurface(sId);
+          }
+        }
+        break;
+      }
     }
-    if (e.key === 'Delete' || e.key === 'Backspace') {
-      if (store.ui.selectedSurfaceId && store.ui.selectedPointIndex === null) {
-        // nothing — don't accidental-delete surfaces
+
+    // Arrow Nudge for Selected Control Point
+    const surfId = store.ui.selectedSurfaceId;
+    const ptIdx  = store.ui.selectedPointIndex;
+    if (surfId && ptIdx !== null) {
+      const surface = store.getSurface(surfId);
+      if (surface && surface.points[ptIdx]) {
+        const step = e.shiftKey ? 0.01 : 0.002;
+        const pt = { ...surface.points[ptIdx] };
+        let moved = false;
+        if (e.key === 'ArrowLeft')  { pt.x -= step; moved = true; }
+        if (e.key === 'ArrowRight') { pt.x += step; moved = true; }
+        if (e.key === 'ArrowUp')    { pt.y -= step; moved = true; }
+        if (e.key === 'ArrowDown')  { pt.y += step; moved = true; }
+
+        if (moved) {
+          e.preventDefault();
+          pt.x = Math.max(0, Math.min(1, pt.x));
+          pt.y = Math.max(0, Math.min(1, pt.y));
+          store.movePoint(surfId, ptIdx, pt);
+        }
       }
     }
   });

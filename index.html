@@ -196,11 +196,12 @@
       <!-- ═══════════════════════════════════════════════════════════════════ -->
       <aside id="panel-outputs" class="workspace-panel">
 
-        <!-- Tab bar: Inspector / Outputs / FX / MIDI -->
+        <!-- Tab bar: Inspector / Outputs / FX / Audio / MIDI -->
         <div class="right-panel-tabs">
           <button class="rp-tab active" data-rp="inspector">INSPECTOR</button>
           <button class="rp-tab" data-rp="outputs">OUTPUTS</button>
           <button class="rp-tab" data-rp="fx">FX</button>
+          <button class="rp-tab" data-rp="audio">AUDIO</button>
           <button class="rp-tab" data-rp="midi">MIDI</button>
         </div>
 
@@ -246,6 +247,13 @@
           <div class="panel-header"><span>Stackable FX Chain</span><button class="btn-xs" id="btn-add-fx">＋ Add FX</button></div>
           <div id="fx-chain-list" class="fx-list-scroll">
             <!-- Populated by EffectsPanel TS -->
+          </div>
+        </div>
+
+        <!-- AUDIO sub-panel -->
+        <div id="rp-audio" class="rp-sub" style="display:none">
+          <div id="audio-panel" style="flex:1;overflow-y:auto;padding:10px">
+            <!-- Populated by AudioPanel TS -->
           </div>
         </div>
 

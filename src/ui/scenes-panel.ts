@@ -4,15 +4,16 @@ import { sceneManager } from '../scenes/manager';
 import type { RenderEngine } from '../render/engine';
 
 export class ScenesPanel {
-  private el: HTMLElement;
+  private el: HTMLElement | null = null;
 
   constructor(private engine: RenderEngine) {
-    this.el = document.getElementById('scenes-panel')!;
+    this.el = document.getElementById('scenes-panel') || document.getElementById('scenes-list') || document.getElementById('scenes-wrap') || null;
     if (!this.el) return;
     this.render();
   }
 
   private render() {
+    if (!this.el) return;
     this.el.innerHTML = `
       <div class="panel-header">
         <span class="panel-title">Scenes</span>
