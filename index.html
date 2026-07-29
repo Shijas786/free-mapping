@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebMapper — Projection Mapping Tool</title>
+  <meta name="description" content="Full-featured browser-based projection mapping: quad+mesh warp, polygon mask, effects engine, audio-reactivity, MIDI, multi-projector output." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <!-- ── Toolbar ──────────────────────────────────────────────────────────── -->
+  <header id="toolbar" role="banner" aria-label="Main toolbar"></header>
+
+  <!-- ── App layout ──────────────────────────────────────────────────────── -->
+  <div id="app-layout">
+
+    <!-- Left sidebar -->
+    <aside id="sidebar-left" aria-label="Control panels">
+
+      <nav id="panel-tabs" aria-label="Panel navigation">
+        <button class="panel-tab active" data-panel="playground" id="tab-playground" style="background:rgba(99,102,241,0.25);border-color:#818cf8;color:#a5f3fc">
+          <svg viewBox="0 0 20 20"><path d="M10 2l2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8z" fill="currentColor"/></svg>Play
+        </button>
+        <button class="panel-tab" data-panel="surface"  id="tab-surface">
+          <svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Surfaces
+        </button>
+        <button class="panel-tab" data-panel="layer"    id="tab-layer">
+          <svg viewBox="0 0 20 20"><rect x="3" y="12" width="14" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="3" y="7" width="14" height="4" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".6"/><rect x="3" y="2" width="14" height="4" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".3"/></svg>Layers
+        </button>
+        <button class="panel-tab" data-panel="effects"  id="tab-effects">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M7 10 Q10 5 13 10 Q10 15 7 10z" stroke="currentColor" fill="none"/></svg>Effects
+        </button>
+        <button class="panel-tab" data-panel="mesh"     id="tab-mesh">
+          <svg viewBox="0 0 20 20"><path d="M3 3h14M3 8h14M3 13h14M3 18h14M3 3v15M8 3v15M13 3v15M18 3v15" stroke="currentColor" stroke-width="1" fill="none" opacity=".8"/></svg>Mesh
+        </button>
+        <button class="panel-tab" data-panel="mask"     id="tab-mask">
+          <svg viewBox="0 0 20 20"><polygon points="10,3 17,8 14,17 6,17 3,8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Mask
+        </button>
+        <button class="panel-tab" data-panel="scenes"   id="tab-scenes">
+          <svg viewBox="0 0 20 20"><rect x="2" y="4" width="7" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="11" y="4" width="7" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".5"/></svg>Scenes
+        </button>
+        <button class="panel-tab" data-panel="audio"    id="tab-audio">
+          <svg viewBox="0 0 20 20"><polyline points="2,10 5,5 8,15 11,7 14,12 17,10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>Audio
+        </button>
+        <button class="panel-tab" data-panel="shader"   id="tab-shader">
+          <svg viewBox="0 0 20 20"><polyline points="6,8 3,10 6,12" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="14,8 17,10 14,12" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="11" y1="6" x2="9" y2="14" stroke="currentColor" stroke-width="1.5"/></svg>GLSL
+        </button>
+        <button class="panel-tab" data-panel="output"   id="tab-output">
+          <svg viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="7,15 7,17 13,17 13,15" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Output
+        </button>
+        <button class="panel-tab" data-panel="midi"     id="tab-midi">
+          <svg viewBox="0 0 20 20"><rect x="3" y="6" width="14" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="7" y1="6" x2="7" y2="10" stroke="currentColor" stroke-width="2"/><line x1="10" y1="6" x2="10" y2="10" stroke="currentColor" stroke-width="2"/><line x1="13" y1="6" x2="13" y2="10" stroke="currentColor" stroke-width="2"/></svg>MIDI
+        </button>
+        <button class="panel-tab" data-panel="scanner"  id="tab-scanner">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="10" cy="10" r="3" fill="currentColor"/><line x1="10" y1="1" x2="10" y2="5" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="15" x2="10" y2="19" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="5" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="15" y1="10" x2="19" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>Scan
+        </button>
+      </nav>
+
+      <!-- All panels — JS controls visibility -->
+      <section id="surface-panel"       class="side-panel" role="region"></section>
+      <section id="layer-panel"         class="side-panel" role="region"></section>
+      <section id="effects-panel"       class="side-panel" role="region"></section>
+      <section id="mesh-panel"          class="side-panel" role="region"></section>
+      <section id="mask-panel"          class="side-panel" role="region"></section>
+      <section id="scenes-panel"        class="side-panel" role="region"></section>
+      <section id="audio-panel"         class="side-panel" role="region"></section>
+      <section id="shader-editor-panel" class="side-panel" role="region"></section>
+      <section id="output-panel"        class="side-panel" role="region"></section>
+      <section id="midi-panel"          class="side-panel" role="region"></section>
+
+    </aside>
+
+    <!-- Stage -->
+    <main id="stage-wrapper" role="main" aria-label="Projection stage">
+      <div id="stage">
+        <canvas id="stage-canvas" aria-label="WebGL rendering canvas"></canvas>
+        <div id="stage-overlay" aria-hidden="true"></div>
+        <div id="stage-info-bar">
+          <span id="stage-res">—</span>
+          <span id="stage-fps">— fps</span>
+          <span id="stage-surfaces">—</span>
+          <span id="stage-layers">—</span>
+          <span id="stage-gl-info">WebGL2</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right sidebar — Inspector + shortcuts -->
+    <aside id="sidebar-right" aria-label="Inspector">
+      <section id="properties-panel" class="side-panel" style="flex:1;display:flex;flex-direction:column;" role="region"></section>
+
+      <div id="shortcut-hint-panel">
+        <div class="panel-header"><span class="panel-title">Shortcuts</span></div>
+        <dl class="shortcut-list">
+          <dt>⌘Z</dt><dd>Undo</dd>
+          <dt>⌘Y</dt><dd>Redo</dd>
+          <dt>⌘S</dt><dd>Save</dd>
+          <dt>G</dt><dd>Grid</dd>
+          <dt>T</dt><dd>Test card</dd>
+          <dt>F</dt><dd>Fullscreen</dd>
+          <dt>M</dt><dd>Toggle mask tool</dd>
+          <dt>↑↓←→</dt><dd>Nudge pt</dd>
+          <dt>⇧+Arrow</dt><dd>Nudge ×10</dd>
+          <dt>Dbl-click</dt><dd>Rename</dd>
+          <dt>Del</dt><dd>Remove pt/layer</dd>
+        </dl>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Status bar -->
+  <footer id="status-bar" role="contentinfo">
+    <span id="status-msg">Ready</span>
+    <span class="status-right">
+      <span id="status-surface">No surface selected</span>
+      <span class="status-sep">·</span>
+      <span>WebMapper v1.0</span>
+    </span>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
