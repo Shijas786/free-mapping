@@ -61,9 +61,8 @@ async function main() {
   new PlaygroundPanel(engine);
 
   // ── Panel tab navigation ───────────────────────────────────────────────────
-  const allPanels = document.querySelectorAll<HTMLElement>('.side-panel');
   const activateTab = (panelId: string) => {
-    allPanels.forEach((p) => p.style.display = 'none');
+    document.querySelectorAll<HTMLElement>('.side-panel').forEach((p) => p.style.display = 'none');
     const target = document.getElementById(`${panelId}-panel`);
     if (target) { target.style.display = 'flex'; target.style.flexDirection = 'column'; }
     document.querySelectorAll('.panel-tab').forEach((t) =>

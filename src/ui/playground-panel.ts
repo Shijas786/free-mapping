@@ -16,11 +16,7 @@ export class PlaygroundPanel {
   private el: HTMLElement;
 
   constructor(private engine: RenderEngine) {
-    this.el = document.createElement('div');
-    this.el.id = 'playground-panel';
-    this.el.className = 'side-panel';
-    const container = document.getElementById('sidebar-left');
-    if (container) container.appendChild(this.el);
+    this.el = document.getElementById('playground-panel')!;
     this.render();
   }
 
