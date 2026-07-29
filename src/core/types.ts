@@ -9,13 +9,18 @@ export type SurfaceType = 'quad' | 'mesh' | 'model3d';
 
 export type BlendMode = 'normal' | 'add' | 'multiply' | 'screen' | 'subtract';
 
-export type SourceType = 'video' | 'image' | 'camera' | 'shader' | 'color';
+export type SourceType = 'video' | 'image' | 'camera' | 'shader' | 'color' | 'text';
 
 export interface SourceRef {
   type: SourceType;
   url?: string;           // video/image URL or data URL
   shaderCode?: string;    // generative GLSL fragment source
   color?: string;         // solid color hex for 'color' type
+  text?: string;          // text content for 'text' type
+  textColor?: string;     // text foreground color (hex)
+  textBg?: string;        // text background color (hex, transparent)
+  textSize?: number;      // font size in px (default 64)
+  textFont?: string;      // font family (default Inter)
 }
 
 export interface Effect {

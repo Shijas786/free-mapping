@@ -169,6 +169,63 @@ class GenerativePool {
   }
 }
 
+// ── Text canvas renderer ──────────────────────────────────────────────────────
+
+function renderTextToCanvas(
+  text: string,
+  textColor = '#ffffff',
+  textBg = 'transparent',
+  fontSize = 64,
+  fontFamily = 'Inter, sans-serif',
+  width = 1024,
+  height = 512
+): OffscreenCanvas {
+  const canvas = new OffscreenCanvas(width, height);
+  const ctx = canvas.getContext('2d')!;
+
+  // Background
+  if (textBg && textBg !== 'transparent') {
+    ctx.fillStyle = textBg;
+    ctx.fillRect(0, 0, width, height);
+  } else {
+    ctx.clearRect(0, 0, width, height);
+  }
+
+  // Text styling
+  ctx.fillStyle = textColor;
+  ctx.font = `bold ${fontSize}px ${fontFamily}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Word wrap for long text
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let currentLine = '';
+  const maxWidth = width * 0.88;
+
+  for (const word of words) {
+    const testLine = currentLine ? `${currentLine} ${word}` : word;
+    const measured = ctx.measureText(testLine);
+    if (measured.width > maxWidth && currentLine) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = testLine;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+
+  const lineHeight = fontSize * 1.3;
+  const totalH = lines.length * lineHeight;
+  const startY = (height - totalH) / 2 + lineHeight / 2;
+
+  lines.forEach((line, i) => {
+    ctx.fillText(line, width / 2, startY + i * lineHeight);
+  });
+
+  return canvas;
+}
+
 // ── Texture cache ─────────────────────────────────────────────────────────────
 
 class TextureCache {
@@ -346,7 +403,19 @@ export class RenderEngine {
     const gl = this.gl;
 
     // 1. Upload media texture
-    if (layer.source.type !== 'color' && layer.source.type !== 'shader') {
+    if (layer.source.type === 'text') {
+      // Render text via Canvas2D → upload as texture every frame
+      const src = layer.source;
+      const offscreen = renderTextToCanvas(
+        src.text ?? 'WebMapper Text',
+        src.textColor ?? '#ffffff',
+        src.textBg ?? 'transparent',
+        src.textSize ?? 72,
+        src.textFont ?? 'Inter, sans-serif',
+        W, H
+      );
+      try { this.texCache.upload(layer.id, offscreen as unknown as TexImageSource); } catch {}
+    } else if (layer.source.type !== 'color' && layer.source.type !== 'shader') {
       const el = this.media.getElement(layer.id);
       if (el) { try { this.texCache.upload(layer.id, el as TexImageSource); } catch {} }
     } else if (layer.source.type === 'shader') {
@@ -613,6 +682,7 @@ export class RenderEngine {
     if (source.type === 'video'  && source.url)    await this.media.loadURL(layerId, source.url, 'video');
     else if (source.type === 'image' && source.url) await this.media.loadURL(layerId, source.url, 'image');
     else if (source.type === 'camera')              await this.media.startCamera(layerId);
+    else if (source.type === 'text')                this.media.setColor(layerId); // placeholder — real render happens in renderLayer
     else                                            this.media.setColor(layerId);
   }
 

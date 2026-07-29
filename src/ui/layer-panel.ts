@@ -95,6 +95,50 @@ export class LayerPanel {
         await this.engine.loadMediaForLayer(layer.id);
       });
 
+      // Text source button
+      row.querySelector('.source-text-btn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        store.updateLayer({ ...layer, source: {
+          type: 'text',
+          text: layer.source.text ?? 'Hello World',
+          textColor: layer.source.textColor ?? '#ffffff',
+          textBg: layer.source.textBg ?? 'transparent',
+          textSize: layer.source.textSize ?? 72,
+        }});
+      });
+
+      // Text content input
+      const textContentInput = row.querySelector('.text-content-input') as HTMLInputElement | null;
+      textContentInput?.addEventListener('input', () => {
+        store.updateLayer({ ...layer, source: { ...layer.source, text: textContentInput.value } });
+      });
+
+      // Text color input
+      const textColorInput = row.querySelector('.text-color-input') as HTMLInputElement | null;
+      textColorInput?.addEventListener('input', () => {
+        store.updateLayer({ ...layer, source: { ...layer.source, textColor: textColorInput.value } });
+      });
+
+      // Text background color input
+      const textBgInput = row.querySelector('.text-bg-input') as HTMLInputElement | null;
+      const textBgTransp = row.querySelector('.text-bg-transparent') as HTMLInputElement | null;
+      textBgInput?.addEventListener('input', () => {
+        const isTransp = textBgTransp?.checked;
+        store.updateLayer({ ...layer, source: { ...layer.source, textBg: isTransp ? 'transparent' : textBgInput.value } });
+      });
+      textBgTransp?.addEventListener('change', () => {
+        store.updateLayer({ ...layer, source: { ...layer.source, textBg: textBgTransp.checked ? 'transparent' : (textBgInput?.value ?? '#000000') } });
+      });
+
+      // Text size slider
+      const textSizeInput = row.querySelector('.text-size-input') as HTMLInputElement | null;
+      const textSizeVal = row.querySelector('.text-size-val') as HTMLElement | null;
+      textSizeInput?.addEventListener('input', () => {
+        const size = parseInt(textSizeInput.value);
+        if (textSizeVal) textSizeVal.textContent = `${size}px`;
+        store.updateLayer({ ...layer, source: { ...layer.source, textSize: size } });
+      });
+
       row.querySelector('.source-color-input')?.addEventListener('change', (e) => {
         const input = e.target as HTMLInputElement;
         store.updateLayer({ ...layer, source: { type: 'color', color: input.value } });
@@ -107,10 +151,33 @@ export class LayerPanel {
     const src = layer.source;
 
     const sourceDisplay = src.type === 'color'
-      ? `<span class="src-color-swatch" style="background:${src.color ?? '#6366f1'}"></span> Solid`
-      : src.type === 'camera' ? '📷 Camera'
+      ? `<span class="src-color-swatch" style="background:${src.color ?? '#6366f1'}"></span> Solid Color`
+      : src.type === 'camera' ? '📷 Live Camera'
+      : src.type === 'text' ? `🔤 "${(src.text ?? '').slice(0, 16)}${(src.text ?? '').length > 16 ? '…' : ''}"`
       : src.url ? `🎬 ${src.url.split('/').pop()?.slice(0, 20) ?? 'media'}`
       : '— none —';
+
+    const textControls = src.type === 'text' ? `
+      <div class="text-source-controls">
+        <div class="insp-row">
+          <label>Text</label>
+          <input type="text" class="text-content-input" value="${(src.text ?? 'Hello World').replace(/"/g, '&quot;')}" placeholder="Enter text..." style="flex:1">
+        </div>
+        <div class="insp-row">
+          <label>Color</label>
+          <input type="color" class="text-color-input" value="${src.textColor ?? '#ffffff'}" title="Text color">
+          <label>BG</label>
+          <input type="color" class="text-bg-input" value="${src.textBg && src.textBg !== 'transparent' ? src.textBg : '#000000'}" title="Background color">
+          <label>Transp</label>
+          <input type="checkbox" class="text-bg-transparent" ${!src.textBg || src.textBg === 'transparent' ? 'checked' : ''}>
+        </div>
+        <div class="insp-row">
+          <label>Size</label>
+          <input type="range" class="text-size-input" min="12" max="200" step="2" value="${src.textSize ?? 72}" style="flex:1">
+          <span class="text-size-val">${src.textSize ?? 72}px</span>
+        </div>
+      </div>
+    ` : '';
 
     return `
       <div class="layer-row ${isSelected ? 'selected' : ''}" id="layer-row-${layer.id}" data-id="${layer.id}">
@@ -126,10 +193,12 @@ export class LayerPanel {
           <div class="layer-source-row">
             <span class="source-label">Source:</span>
             <span class="source-display">${sourceDisplay}</span>
-            <button class="source-file-btn icon-btn-sm" title="Load file">📂</button>
-            <button class="source-camera-btn icon-btn-sm" title="Use camera">📷</button>
-            ${src.type === 'color' ? `<input type="color" class="source-color-input" value="${src.color ?? '#6366f1'}" title="Color">` : ''}
+            <button class="source-file-btn icon-btn-sm" title="Load image/video file">📂</button>
+            <button class="source-camera-btn icon-btn-sm" title="Use live camera">📷</button>
+            <button class="source-text-btn icon-btn-sm" title="Use text layer">🔤</button>
+            ${src.type === 'color' ? `<input type="color" class="source-color-input" value="${src.color ?? '#6366f1'}" title="Solid color">` : ''}
           </div>
+          ${textControls}
           <label class="opacity-row">
             <span>Opacity</span>
             <input type="range" class="opacity-slider" min="0" max="1" step="0.01" value="${layer.opacity}">

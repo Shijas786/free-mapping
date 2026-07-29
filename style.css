@@ -731,3 +731,54 @@ canvas {
 .icon-btn-sm:hover { color: var(--clr-accent); }
 .icon-btn-sm.active { color: var(--clr-accent); }
 
+
+/* ── Text source controls in layer panel ────────────────────────────────────── */
+.text-source-controls {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--clr-border);
+  border-radius: 5px;
+  padding: 8px;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.text-source-controls .insp-row {
+  margin-bottom: 0;
+  align-items: center;
+  gap: 6px;
+}
+.text-source-controls label { min-width: 36px; font-size: 9.5px; }
+.text-content-input {
+  flex: 1;
+  background: var(--clr-bg);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-text);
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--font-ui);
+  user-select: text;
+}
+.text-content-input:focus { border-color: var(--clr-accent); outline: none; }
+.text-size-val { font-family: var(--font-mono); font-size: 9.5px; color: var(--clr-accent); min-width: 32px; }
+
+/* ── Layer row improvements ─────────────────────────────────────────────────── */
+.layer-row-top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.layer-row-bottom { display: flex; flex-direction: column; gap: 4px; }
+.layer-source-row { display: flex; align-items: center; gap: 4px; font-size: 10px; }
+.source-label { color: var(--clr-text-muted); }
+.source-display { flex: 1; font-size: 10px; color: var(--clr-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.src-color-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.2); vertical-align: middle; }
+.opacity-row { display: flex; align-items: center; gap: 6px; font-size: 10px; }
+.opacity-row span { color: var(--clr-text-muted); min-width: 32px; }
+.opacity-slider { flex: 1; }
+.blend-select {
+  background: var(--clr-bg);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-text);
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  max-width: 70px;
+}
