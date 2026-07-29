@@ -75,7 +75,7 @@ async function main() {
     tab.addEventListener('click', () => activateTab(tab.dataset.panel!));
   });
 
-  activateTab('playground'); // default beginner playground
+  activateTab('surface'); // default mapping workspace
 
   // ── Render loop ────────────────────────────────────────────────────────────
   engine.start();

@@ -24,6 +24,7 @@ export class PlaygroundPanel {
     this.el.innerHTML = `
       <div class="panel-header" style="background:linear-gradient(90deg, rgba(99,102,241,0.2), rgba(34,211,238,0.2))">
         <span class="panel-title" style="font-size:13px;color:#a5f3fc">✨ Beginner Playground</span>
+        <button class="tb-btn" id="btn-pro-mode" style="margin-left:auto;font-size:10px;padding:2px 6px">⚡ Pro Mode →</button>
       </div>
 
       <!-- Quick Guided Steps -->
@@ -76,6 +77,10 @@ export class PlaygroundPanel {
       </div>
     `;
 
+    document.getElementById('btn-pro-mode')?.addEventListener('click', () => {
+      document.getElementById('tab-surface')?.click();
+    });
+
     document.getElementById('preset-disco')?.addEventListener('click', () => this.loadDiscoPreset());
     document.getElementById('preset-building')?.addEventListener('click', () => this.loadBuildingPreset());
     document.getElementById('preset-box')?.addEventListener('click', () => this.loadBoxPreset());
@@ -95,6 +100,9 @@ export class PlaygroundPanel {
     store.loadProject(newProj);
     if (surfaces.length > 0) store.selectSurface(surfaces[0].id);
     this.engine.loadAllMedia();
+
+    // Auto-switch to Surfaces tab so user can immediately edit controls
+    document.getElementById('tab-surface')?.click();
   }
 
   private loadDiscoPreset() {
