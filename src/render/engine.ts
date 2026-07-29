@@ -315,8 +315,19 @@ export class RenderEngine {
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, W, H);
-    gl.clearColor(0.031 * store.ui.masterDimmer, 0.031 * store.ui.masterDimmer, 0.063 * store.ui.masterDimmer, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    // Render Input View canvas (left split)
+    const inputCanvas = document.getElementById('input-canvas') as HTMLCanvasElement | null;
+    if (inputCanvas) {
+      if (inputCanvas.width !== W || inputCanvas.height !== H) {
+        inputCanvas.width = W; inputCanvas.height = H;
+      }
+      const inCtx = inputCanvas.getContext('2d');
+      if (inCtx) {
+        inCtx.fillStyle = '#101014';
+        inCtx.fillRect(0, 0, W, H);
+        try { inCtx.drawImage(this.canvas, 0, 0); } catch {}
+      }
+    }
 
     for (const surface of store.project.surfaces) {
       if (!surface.visible) continue;

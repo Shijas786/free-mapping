@@ -4,14 +4,16 @@ import { spaceScanner } from '../scanner/space-scanner';
 import type { RenderEngine } from '../render/engine';
 
 export class ScannerPanel {
-  private el: HTMLElement;
+  private el: HTMLElement | null = null;
 
   constructor(private engine: RenderEngine) {
-    this.el = document.getElementById('scanner-panel')!;
+    this.el = document.getElementById('scanner-panel');
+    if (!this.el) return;
     this.render();
   }
 
   private render() {
+    if (!this.el) return;
     this.el.innerHTML = `
       <div class="panel-header">
         <span class="panel-title">Space Scanner (Structured Light)</span>

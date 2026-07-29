@@ -4,17 +4,19 @@ import { history } from '../core/history';
 import { GENERATIVE_FRAG_TEMPLATE } from '../render/shaders';
 
 export class ShaderEditor {
-  private el: HTMLElement;
+  private el: HTMLElement | null = null;
   private compileTimeout = 0;
 
   constructor() {
-    this.el = document.getElementById('shader-editor-panel')!;
+    this.el = document.getElementById('shader-editor-panel');
+    if (!this.el) return;
     this.render();
     store.bus.on('LAYER_UPDATED',    () => this.render());
     store.bus.on('UI_STATE_CHANGED', () => this.render());
   }
 
   private render() {
+    if (!this.el) return;
     const layerId = store.ui.selectedLayerId;
     const layer   = layerId ? store.project.layers.find((l) => l.id === layerId) : null;
     const isShader = layer?.source.type === 'shader';

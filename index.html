@@ -3,122 +3,321 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WebMapper — Projection Mapping Tool</title>
-  <meta name="description" content="Full-featured browser-based projection mapping: quad+mesh warp, polygon mask, effects engine, audio-reactivity, MIDI, multi-projector output." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <title>WebMapper Pro — Advanced Projection Mapping Studio</title>
+  <meta name="description" content="Professional browser-based projection mapping tool. Map video and generative content onto real-world surfaces with multi-projector support, DMX/Art-Net, MIDI, and real-time FX.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
+  <div id="app">
 
-  <!-- ── Toolbar ──────────────────────────────────────────────────────────── -->
-  <header id="toolbar" role="banner" aria-label="Main toolbar"></header>
+    <!-- ── 1. TOP MENU & TRANSPORT BAR ─────────────────────────────────────── -->
+    <header id="top-bar">
+      <div class="top-menu-brand">
+        <span class="app-logo">◈ WebMapper</span>
+        <span class="app-version">Pro</span>
+      </div>
 
-  <!-- ── App layout ──────────────────────────────────────────────────────── -->
-  <div id="app-layout">
-
-    <!-- Left sidebar -->
-    <aside id="sidebar-left" aria-label="Control panels">
-
-      <nav id="panel-tabs" aria-label="Panel navigation">
-        <button class="panel-tab active" data-panel="surface"  id="tab-surface">
-          <svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Surfaces
-        </button>
-        <button class="panel-tab" data-panel="layer"    id="tab-layer">
-          <svg viewBox="0 0 20 20"><rect x="3" y="12" width="14" height="5" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="3" y="7" width="14" height="4" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".6"/><rect x="3" y="2" width="14" height="4" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".3"/></svg>Layers
-        </button>
-        <button class="panel-tab" data-panel="effects"  id="tab-effects">
-          <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M7 10 Q10 5 13 10 Q10 15 7 10z" stroke="currentColor" fill="none"/></svg>Effects
-        </button>
-        <button class="panel-tab" data-panel="mesh"     id="tab-mesh">
-          <svg viewBox="0 0 20 20"><path d="M3 3h14M3 8h14M3 13h14M3 18h14M3 3v15M8 3v15M13 3v15M18 3v15" stroke="currentColor" stroke-width="1" fill="none" opacity=".8"/></svg>Mesh
-        </button>
-        <button class="panel-tab" data-panel="mask"     id="tab-mask">
-          <svg viewBox="0 0 20 20"><polygon points="10,3 17,8 14,17 6,17 3,8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Mask
-        </button>
-        <button class="panel-tab" data-panel="scenes"   id="tab-scenes">
-          <svg viewBox="0 0 20 20"><rect x="2" y="4" width="7" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="11" y="4" width="7" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".5"/></svg>Scenes
-        </button>
-        <button class="panel-tab" data-panel="audio"    id="tab-audio">
-          <svg viewBox="0 0 20 20"><polyline points="2,10 5,5 8,15 11,7 14,12 17,10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>Audio
-        </button>
-        <button class="panel-tab" data-panel="shader"   id="tab-shader">
-          <svg viewBox="0 0 20 20"><polyline points="6,8 3,10 6,12" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="14,8 17,10 14,12" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="11" y1="6" x2="9" y2="14" stroke="currentColor" stroke-width="1.5"/></svg>GLSL
-        </button>
-        <button class="panel-tab" data-panel="output"   id="tab-output">
-          <svg viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="7,15 7,17 13,17 13,15" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Output
-        </button>
-        <button class="panel-tab" data-panel="midi"     id="tab-midi">
-          <svg viewBox="0 0 20 20"><rect x="3" y="6" width="14" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="7" y1="6" x2="7" y2="10" stroke="currentColor" stroke-width="2"/><line x1="10" y1="6" x2="10" y2="10" stroke="currentColor" stroke-width="2"/><line x1="13" y1="6" x2="13" y2="10" stroke="currentColor" stroke-width="2"/></svg>MIDI
-        </button>
-        <button class="panel-tab" data-panel="scanner"  id="tab-scanner">
-          <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="10" cy="10" r="3" fill="currentColor"/><line x1="10" y1="1" x2="10" y2="5" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="15" x2="10" y2="19" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="5" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="15" y1="10" x2="19" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>Scan
-        </button>
+      <!-- Menu Dropdowns -->
+      <nav class="top-nav-menu">
+        <div class="menu-item">File
+          <div class="dropdown-content">
+            <a id="menu-new">New Project</a>
+            <a id="menu-save">Save (⌘S)</a>
+            <a id="menu-export">Export Project JSON...</a>
+            <a id="menu-import">Import Project JSON...</a>
+          </div>
+        </div>
+        <div class="menu-item">Edit
+          <div class="dropdown-content">
+            <a id="menu-undo">Undo (⌘Z)</a>
+            <a id="menu-redo">Redo (⌘Y)</a>
+          </div>
+        </div>
+        <div class="menu-item">View
+          <div class="dropdown-content">
+            <a id="menu-toggle-grid">Toggle Grid (G)</a>
+            <a id="menu-toggle-testcard">Toggle Test Card (T)</a>
+          </div>
+        </div>
+        <div class="menu-item">Window
+          <div class="dropdown-content">
+            <a id="menu-fullscreen">Fullscreen Output (F)</a>
+          </div>
+        </div>
       </nav>
 
-      <!-- All panels — JS controls visibility -->
-      <section id="surface-panel"       class="side-panel" role="region"></section>
-      <section id="layer-panel"         class="side-panel" role="region"></section>
-      <section id="effects-panel"       class="side-panel" role="region"></section>
-      <section id="mesh-panel"          class="side-panel" role="region"></section>
-      <section id="mask-panel"          class="side-panel" role="region"></section>
-      <section id="scenes-panel"        class="side-panel" role="region"></section>
-      <section id="audio-panel"         class="side-panel" role="region"></section>
-      <section id="shader-editor-panel" class="side-panel" role="region"></section>
-      <section id="output-panel"        class="side-panel" role="region"></section>
-      <section id="midi-panel"          class="side-panel" role="region"></section>
-      <section id="scanner-panel"       class="side-panel" role="region"></section>
+      <!-- Center Transport & Master Controls -->
+      <div class="top-transport-center">
+        <button id="btn-play-pause" class="btn-transport active" title="Play / Pause Transport">▶ Play</button>
 
-    </aside>
+        <div class="top-sep"></div>
 
-    <!-- Stage -->
-    <main id="stage-wrapper" role="main" aria-label="Projection stage">
-      <div id="stage">
-        <canvas id="stage-canvas" aria-label="WebGL rendering canvas"></canvas>
-        <div id="stage-overlay" aria-hidden="true"></div>
-        <div id="stage-info-bar">
-          <span id="stage-res">—</span>
-          <span id="stage-fps">— fps</span>
-          <span id="stage-surfaces">—</span>
-          <span id="stage-layers">—</span>
-          <span id="stage-gl-info">WebGL2</span>
+        <button id="btn-blackout" class="btn-transport danger" title="Master Blackout">⬛ Blackout</button>
+        <button id="btn-freeze" class="btn-transport" title="Freeze Frame">❄️ Freeze</button>
+
+        <div class="dimmer-wrap">
+          <span>Dim:</span>
+          <input type="range" id="master-dimmer-slider" min="0" max="1" step="0.05" value="1.0">
+          <span id="dimmer-val">100%</span>
+        </div>
+
+        <div class="top-sep"></div>
+
+        <div class="bpm-wrap">
+          <span id="bpm-display">120.0 BPM</span>
+          <button id="btn-tap-tempo" class="btn-xs">TAP</button>
+        </div>
+
+        <div class="top-sep"></div>
+
+        <button id="btn-grid" class="btn-transport" title="Toggle Grid Overlay (G)">Grid</button>
+        <button id="btn-testcard" class="btn-transport" title="Toggle Test Card (T)">TestCard</button>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="top-actions-right">
+        <span class="project-title-display" id="project-name-display">Untitled Project</span>
+        <button id="btn-save" class="btn-primary">Save</button>
+        <button id="btn-fullscreen-out" class="btn-accent">Output ↗</button>
+      </div>
+    </header>
+
+    <!-- ── 2. MAIN 3-ZONE WORKSPACE ────────────────────────────────────────── -->
+    <div id="main-workspace">
+
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- LEFT PANEL — INPUTS (Media Sources) + Surfaces Tree                -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <aside id="panel-inputs" class="workspace-panel">
+
+        <!-- Tab bar: Inputs / Surfaces -->
+        <div class="left-panel-tabs">
+          <button class="lp-tab active" data-lp="inputs">INPUTS</button>
+          <button class="lp-tab" data-lp="surfaces">SURFACES</button>
+        </div>
+
+        <!-- INPUTS sub-panel -->
+        <div id="lp-inputs" class="lp-sub active">
+          <div class="panel-header">
+            <span>Media Sources</span>
+            <button class="btn-icon" id="btn-add-input" title="Add Media Source">⊕</button>
+          </div>
+
+          <!-- Filter tabs -->
+          <div class="inputs-filter-tabs">
+            <button class="filter-tab active" data-cat="all">All</button>
+            <button class="filter-tab" data-cat="Generators">Gen</button>
+            <button class="filter-tab" data-cat="Materials">Shaders</button>
+            <button class="filter-tab" data-cat="Live Input">Live</button>
+          </div>
+
+          <!-- Media Sources List -->
+          <div id="inputs-list-container" class="inputs-list">
+            <!-- Populated by TS -->
+          </div>
+
+          <!-- Per-Source Inspector Drawer -->
+          <div id="source-inspector-drawer" class="drawer-box">
+            <div class="drawer-title">Source Inspector</div>
+            <div class="drawer-body" id="source-inspector-content">
+              <div class="insp-row"><label>Speed</label><input type="range" id="src-speed" min="0.1" max="3" step="0.1" value="1.0"><span>1.0x</span></div>
+              <div class="insp-row"><label>Loop</label><select id="src-loop"><option value="loop">Loop</option><option value="once">Once</option><option value="pingpong">PingPong</option></select></div>
+              <div class="insp-row"><label>Brightness</label><input type="range" id="src-brightness" min="0" max="2" step="0.05" value="1.0"></div>
+              <div class="insp-row"><label>Contrast</label><input type="range" id="src-contrast" min="0" max="2" step="0.05" value="1.0"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SURFACES sub-panel -->
+        <div id="lp-surfaces" class="lp-sub">
+          <div class="panel-header">
+            <span>Surface Tree</span>
+            <button class="btn-icon" id="btn-add-surface" title="Add Quad Surface">⊕</button>
+          </div>
+          <!-- Populated by SurfacePanel TS -->
+          <div id="surface-tree-list" class="surface-tree-scroll"></div>
+        </div>
+
+      </aside>
+
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- CENTER — MAPPER CANVAS                                              -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <section id="panel-mapper" class="workspace-center">
+        <!-- Mapper Canvas Toolbar Strip -->
+        <div id="mapper-toolbar">
+          <div class="toolbar-tools-group">
+            <span class="tool-label">Tools:</span>
+            <button class="tool-btn active" id="tool-quad" title="Create Quad Surface">▭ Quad</button>
+            <button class="tool-btn" id="tool-mesh" title="Create Mesh Surface">▦ Mesh</button>
+            <button class="tool-btn" id="tool-bezier" title="Create Bézier Mask">☖ Mask</button>
+            <button class="tool-btn" id="tool-3d" title="Create 3D Surface">🧊 3D OBJ</button>
+          </div>
+
+          <div class="toolbar-sep-v"></div>
+
+          <div class="toolbar-tools-group">
+            <button class="tool-btn" id="btn-snap-toggle" title="Toggle Vertex Snapping">🧲 Snap</button>
+            <button class="tool-btn" id="btn-reset-perspective" title="Reset Selected Surface Perspective">↺ Reset</button>
+          </div>
+
+          <div class="toolbar-right-tools">
+            <span class="zoom-display" id="zoom-level-val">🔍 100%</span>
+            <button class="btn-xs" id="btn-zoom-in">＋</button>
+            <button class="btn-xs" id="btn-zoom-out">－</button>
+            <button class="btn-xs" id="btn-zoom-reset">1:1</button>
+          </div>
+        </div>
+
+        <!-- Working Mapper Stage Canvas -->
+        <div id="canvas-stage-wrapper">
+          <canvas id="stage-canvas"></canvas>
+          <div id="stage-overlay" class="canvas-overlay"></div>
+
+          <!-- Context Menu -->
+          <div id="canvas-context-menu" class="context-menu" style="display:none">
+            <div class="ctx-item" id="ctx-duplicate">Duplicate Surface</div>
+            <div class="ctx-item" id="ctx-subdivide">Subdivide Mesh (4×4)</div>
+            <div class="ctx-item" id="ctx-mask">Add Bézier Mask</div>
+            <div class="ctx-divider"></div>
+            <div class="ctx-item danger" id="ctx-delete">Delete Surface</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- RIGHT PANEL — Inspector, Outputs, Effects, MIDI                    -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <aside id="panel-outputs" class="workspace-panel">
+
+        <!-- Tab bar: Inspector / Outputs / FX / MIDI -->
+        <div class="right-panel-tabs">
+          <button class="rp-tab active" data-rp="inspector">INSPECTOR</button>
+          <button class="rp-tab" data-rp="outputs">OUTPUTS</button>
+          <button class="rp-tab" data-rp="fx">FX</button>
+          <button class="rp-tab" data-rp="midi">MIDI</button>
+        </div>
+
+        <!-- INSPECTOR sub-panel — Surface properties (PropertiesPanel.ts) -->
+        <div id="rp-inspector" class="rp-sub active">
+          <div id="properties-panel" style="display:flex;flex-direction:column;flex:1;overflow-y:auto">
+            <!-- Populated by PropertiesPanel TS -->
+          </div>
+          <!-- Layer panel (LayerPanel.ts) -->
+          <div id="layer-panel" style="flex:1;overflow-y:auto;border-top:1px solid var(--clr-border)">
+            <!-- Populated by LayerPanel TS -->
+          </div>
+        </div>
+
+        <!-- OUTPUTS sub-panel (OutputPanel.ts) -->
+        <div id="rp-outputs" class="rp-sub" style="display:none">
+          <div id="output-panel" style="flex:1;overflow-y:auto">
+            <!-- Populated by OutputPanel TS -->
+          </div>
+          <!-- Hardware / Projectors static section -->
+          <div class="outputs-scroll-area">
+            <div class="panel-sec-title">Edge Blending</div>
+            <div class="edge-blend-box">
+              <div class="insp-row"><label>Left Blend</label><input type="range" id="blend-left" min="0" max="300" value="0"><span>0px</span></div>
+              <div class="insp-row"><label>Right Blend</label><input type="range" id="blend-right" min="0" max="300" value="0"><span>0px</span></div>
+              <div class="insp-row"><label>Top Blend</label><input type="range" id="blend-top" min="0" max="300" value="0"><span>0px</span></div>
+              <div class="insp-row"><label>Bottom Blend</label><input type="range" id="blend-bottom" min="0" max="300" value="0"><span>0px</span></div>
+            </div>
+            <div class="panel-sec-title">Hardware & DMX Relay</div>
+            <div class="dmx-card">
+              <div class="insp-row">
+                <span>Art-Net 4 Broadcast</span>
+                <button class="btn-xs active" id="btn-artnet-toggle">ON</button>
+              </div>
+              <div class="insp-row"><label>Universe</label><input type="number" value="1" class="inp-sm" style="width:50px"></div>
+              <div class="insp-row"><label>Node Relay</label><span style="font-family:var(--font-mono);font-size:10px;color:#10b981">ws://localhost:8080</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FX sub-panel -->
+        <div id="rp-fx" class="rp-sub" style="display:none">
+          <div class="panel-header"><span>Stackable FX Chain</span><button class="btn-xs" id="btn-add-fx">＋ Add FX</button></div>
+          <div id="fx-chain-list" class="fx-list-scroll">
+            <!-- Populated by EffectsPanel TS -->
+          </div>
+        </div>
+
+        <!-- MIDI sub-panel -->
+        <div id="rp-midi" class="rp-sub" style="display:none">
+          <div id="midi-panel" style="flex:1;overflow-y:auto;padding:10px">
+            <!-- Populated by MIDIPanel TS -->
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- ── 3. BOTTOM PANEL: LAYERS, TIMELINE & CUES ────────────────────────── -->
+    <footer id="bottom-panel">
+
+      <!-- Top Half: Layers Table & Stackable FX Chain -->
+      <div id="layers-and-fx-bar">
+        <!-- Layers Stack Table -->
+        <div id="layers-stack-wrap">
+          <div class="layers-header">
+            <span>LAYERS STACK</span>
+            <button class="btn-xs" id="btn-add-layer">＋ Add Layer</button>
+          </div>
+          <div id="layers-list" class="layers-list-scroll">
+            <!-- Populated by TS -->
+          </div>
+        </div>
+
+        <!-- Scenes panel -->
+        <div id="scenes-wrap" style="width:180px;border-right:1px solid var(--clr-border);display:flex;flex-direction:column">
+          <div class="layers-header">
+            <span>SCENES</span>
+            <button class="btn-xs" id="btn-add-scene">＋</button>
+          </div>
+          <div id="scenes-list" class="layers-list-scroll">
+            <!-- Populated by ScenesPanel TS -->
+          </div>
         </div>
       </div>
-    </main>
 
-    <!-- Right sidebar — Inspector + shortcuts -->
-    <aside id="sidebar-right" aria-label="Inspector">
-      <section id="properties-panel" class="side-panel" style="flex:1;display:flex;flex-direction:column;" role="region"></section>
-
-      <div id="shortcut-hint-panel">
-        <div class="panel-header"><span class="panel-title">Shortcuts</span></div>
-        <dl class="shortcut-list">
-          <dt>⌘Z</dt><dd>Undo</dd>
-          <dt>⌘Y</dt><dd>Redo</dd>
-          <dt>⌘S</dt><dd>Save</dd>
-          <dt>G</dt><dd>Grid</dd>
-          <dt>T</dt><dd>Test card</dd>
-          <dt>F</dt><dd>Fullscreen</dd>
-          <dt>M</dt><dd>Toggle mask tool</dd>
-          <dt>↑↓←→</dt><dd>Nudge pt</dd>
-          <dt>⇧+Arrow</dt><dd>Nudge ×10</dd>
-          <dt>Dbl-click</dt><dd>Rename</dd>
-          <dt>Del</dt><dd>Remove pt/layer</dd>
-        </dl>
+      <!-- Collapsible Timeline Strip -->
+      <div id="timeline-strip">
+        <div class="timeline-controls">
+          <button class="btn-xs active" id="tl-play">▶</button>
+          <button class="btn-xs" id="tl-pause">⏸</button>
+          <span class="time-display" id="tl-time-display">00:00:00.00</span>
+        </div>
+        <div id="timeline-tracks" class="timeline-tracks-area">
+          <div class="timeline-playhead" id="tl-playhead"></div>
+          <div class="timeline-ticks"></div>
+        </div>
       </div>
-    </aside>
-  </div>
 
-  <!-- Status bar -->
-  <footer id="status-bar" role="contentinfo">
-    <span id="status-msg">Ready</span>
-    <span class="status-right">
-      <span id="status-surface">No surface selected</span>
-      <span class="status-sep">·</span>
-      <span>WebMapper v1.0</span>
-    </span>
-  </footer>
+      <!-- Bottom Cues Bar -->
+      <div id="cues-bar">
+        <div class="cues-bank-title">SCENE CUES BANK-1:</div>
+        <div class="cues-slots-container" id="cues-container">
+          <button class="cue-btn active" data-cue="0"><span class="cue-num">1</span> <span class="cue-lbl">Intro</span></button>
+          <button class="cue-btn" data-cue="1"><span class="cue-num">2</span> <span class="cue-lbl">Build</span></button>
+          <button class="cue-btn" data-cue="2"><span class="cue-num">3</span> <span class="cue-lbl">Drop</span></button>
+          <button class="cue-btn" data-cue="3"><span class="cue-num">4</span> <span class="cue-lbl">Outro</span></button>
+          <button class="cue-btn" data-cue="4"><span class="cue-num">5</span> <span class="cue-lbl">Preset A</span></button>
+          <button class="cue-btn" data-cue="5"><span class="cue-num">6</span> <span class="cue-lbl">Preset B</span></button>
+        </div>
+        <div class="midi-learn-indicator" id="midi-learn-badge">🎛️ MIDI Learn Active</div>
+      </div>
+
+    </footer>
+
+  </div>
 
   <script type="module" src="/src/main.ts"></script>
 </body>

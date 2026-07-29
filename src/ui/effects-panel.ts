@@ -14,6 +14,7 @@ export class EffectsPanel {
 
   constructor() {
     this.el = document.getElementById('effects-panel')!;
+    if (!this.el) return;
     this.render();
     store.bus.on('LAYER_UPDATED',   () => this.render());
     store.bus.on('UI_STATE_CHANGED',() => this.render());

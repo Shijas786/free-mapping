@@ -21,6 +21,8 @@ import { ShaderEditor } from './ui/shader-editor';
 import { MIDIPanel } from './ui/midi-panel';
 import { ScannerPanel } from './ui/scanner-panel';
 import { MediaBinPanel } from './ui/media-bin';
+import { InputsPanel } from './ui/inputs-panel';
+import { bindAllAppControls } from './ui/app-binder';
 
 async function main() {
   // ── Restore autosaved project ──────────────────────────────────────────────
@@ -31,10 +33,14 @@ async function main() {
 
   // ── Canvas + Engine ────────────────────────────────────────────────────────
   const canvas  = document.getElementById('stage-canvas') as HTMLCanvasElement;
-  const stageEl = document.getElementById('stage')!;
+  const stageEl = document.getElementById('canvas-stage-wrapper') || canvas.parentElement!;
   const engine  = new RenderEngine(canvas);
 
-  const resizeCanvas = () => engine.resize(stageEl.clientWidth, stageEl.clientHeight);
+  const resizeCanvas = () => {
+    if (stageEl.clientWidth && stageEl.clientHeight) {
+      engine.resize(stageEl.clientWidth, stageEl.clientHeight);
+    }
+  };
   resizeCanvas();
   new ResizeObserver(resizeCanvas).observe(stageEl);
 
@@ -42,13 +48,16 @@ async function main() {
 
   // ── SVG Overlay ───────────────────────────────────────────────────────────
   const overlayEl = document.getElementById('stage-overlay')!;
-  new CanvasOverlay(overlayEl);
+  if (overlayEl) new CanvasOverlay(overlayEl);
 
-  // ── UI Panels ─────────────────────────────────────────────────────────────
+  // ── UI Panels & Button Event Binders ──────────────────────────────────────
   new Toolbar(engine);
+  new InputsPanel();
   new SurfacePanel(engine);
   new LayerPanel(engine);
+  new PropertiesPanel();
   new MediaBinPanel(engine);
+  bindAllAppControls(engine);
   new EffectsPanel();
   new AudioPanel();
   new OutputPanel(engine);
@@ -59,22 +68,36 @@ async function main() {
   new MIDIPanel();
   new ScannerPanel(engine);
 
-  // ── Panel tab navigation ───────────────────────────────────────────────────
-  const activateTab = (panelId: string) => {
-    document.querySelectorAll<HTMLElement>('.side-panel').forEach((p) => p.style.display = 'none');
-    const target = document.getElementById(`${panelId}-panel`);
-    if (target) { target.style.display = 'flex'; target.style.flexDirection = 'column'; }
-    document.querySelectorAll('.panel-tab').forEach((t) =>
-      t.classList.toggle('active', (t as HTMLElement).dataset.panel === panelId)
-    );
-    store.setUI({ activePanel: panelId as any });
+  // ── Left panel tabs (Inputs / Surfaces) ───────────────────────────────────
+  const activateLeftTab = (tabId: string) => {
+    document.querySelectorAll<HTMLElement>('.lp-sub').forEach((p) => p.classList.remove('active'));
+    document.querySelectorAll<HTMLElement>('.lp-tab').forEach((t) => t.classList.remove('active'));
+    const sub = document.getElementById(`lp-${tabId}`);
+    if (sub) sub.classList.add('active');
+    document.querySelectorAll<HTMLElement>('.lp-tab').forEach((t) => {
+      if ((t as HTMLElement).dataset.lp === tabId) t.classList.add('active');
+    });
   };
-
-  document.querySelectorAll<HTMLElement>('.panel-tab').forEach((tab) => {
-    tab.addEventListener('click', () => activateTab(tab.dataset.panel!));
+  document.querySelectorAll<HTMLElement>('.lp-tab').forEach((tab) => {
+    tab.addEventListener('click', () => activateLeftTab(tab.dataset.lp!));
   });
 
-  activateTab('surface'); // default mapping workspace
+  // ── Right panel tabs (Inspector / Outputs / FX / MIDI) ─────────────────────
+  const activateRightTab = (tabId: string) => {
+    document.querySelectorAll<HTMLElement>('.rp-sub').forEach((p) => { p.style.display = 'none'; });
+    document.querySelectorAll<HTMLElement>('.rp-tab').forEach((t) => t.classList.remove('active'));
+    const sub = document.getElementById(`rp-${tabId}`);
+    if (sub) { sub.style.display = 'flex'; sub.style.flexDirection = 'column'; }
+    document.querySelectorAll<HTMLElement>('.rp-tab').forEach((t) => {
+      if ((t as HTMLElement).dataset.rp === tabId) t.classList.add('active');
+    });
+  };
+  document.querySelectorAll<HTMLElement>('.rp-tab').forEach((tab) => {
+    tab.addEventListener('click', () => activateRightTab(tab.dataset.rp!));
+  });
+
+  activateLeftTab('inputs');
+  activateRightTab('inspector');
 
   // ── Render loop ────────────────────────────────────────────────────────────
   engine.start();
@@ -130,8 +153,7 @@ async function main() {
     if (e.ctrlKey || e.metaKey) return; // handled by toolbar
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
     if (e.key === 'm' || e.key === 'M') {
-      const currentTab = store.ui.activePanel;
-      if (currentTab !== 'mask') activateTab('mask');
+      // M key — toggle mask mode (MaskPanel handles its own visibility)
     }
     if (e.key === 'Delete' || e.key === 'Backspace') {
       if (store.ui.selectedSurfaceId && store.ui.selectedPointIndex === null) {

@@ -14,6 +14,7 @@ export class AudioPanel {
 
   constructor() {
     this.el = document.getElementById('audio-panel')!;
+    if (!this.el) return;
     this.render();
     store.bus.on('UI_STATE_CHANGED', () => {});
     store.bus.on('PROJECT_LOADED',   () => this.render());

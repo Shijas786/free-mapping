@@ -13,7 +13,8 @@ export class MaskTool {
 
   constructor(overlayContainer: HTMLElement) {
     this.overlayContainer = overlayContainer;
-    this.svg = overlayContainer.querySelector('.overlay-svg')!;
+    this.svg = overlayContainer?.querySelector('.overlay-svg') as SVGSVGElement;
+    if (!this.svg) return;
     store.bus.on('UI_STATE_CHANGED', () => {
       if (!store.ui.maskMode) this.deactivate();
     });
@@ -110,12 +111,13 @@ export class MaskTool {
 // ── Mask panel UI ─────────────────────────────────────────────────────────────
 
 export class MaskPanel {
-  private el: HTMLElement;
+  private el: HTMLElement | null = null;
   private tool: MaskTool;
 
   constructor(overlayContainer: HTMLElement) {
-    this.el = document.getElementById('mask-panel')!;
+    this.el = document.getElementById('mask-panel');
     this.tool = new MaskTool(overlayContainer);
+    if (!this.el) return;
     this.render();
     store.bus.on('UI_STATE_CHANGED', () => this.render());
     store.bus.on('SURFACE_UPDATED',  () => this.render());
@@ -123,6 +125,7 @@ export class MaskPanel {
   }
 
   private render() {
+    if (!this.el) return;
     const surfId  = store.ui.selectedSurfaceId;
     const surface = surfId ? store.getSurface(surfId) : null;
     const hasMask = surface?.mask && surface.mask.length >= 3;

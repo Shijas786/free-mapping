@@ -9,6 +9,7 @@ export class MeshPanel {
 
   constructor(private engine: RenderEngine) {
     this.el = document.getElementById('mesh-panel')!;
+    if (!this.el) return;
     this.render();
     store.bus.on('UI_STATE_CHANGED', () => this.render());
     store.bus.on('SURFACE_UPDATED',  () => this.render());

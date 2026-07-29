@@ -31,17 +31,21 @@ export const DEFAULT_MEDIA_ITEMS: MediaBinItem[] = [
 ];
 
 export class MediaBinPanel {
-  private el: HTMLElement;
+  private el: HTMLElement | null = null;
   isGridView = true;
   thumbSize: 'small' | 'med' | 'large' = 'med';
   selectedItem: MediaBinItem | null = DEFAULT_MEDIA_ITEMS[0];
 
   constructor(private engine: RenderEngine) {
-    this.el = document.getElementById('properties-panel')!;
+    // MediaBinPanel is now superseded by InputsPanel for the left panel.
+    // This class is kept for compatibility but skips rendering if no host element.
+    this.el = document.getElementById('media-bin-panel') || null;
+    if (!this.el) return; // graceful skip — InputsPanel handles this
     this.render();
   }
 
   render() {
+    if (!this.el) return;
     this.el.innerHTML = `
       <div class="panel-header" style="justify-content:space-between">
         <span class="panel-title">Media Bin</span>

@@ -8,7 +8,9 @@ export class SurfacePanel {
   private el: HTMLElement;
 
   constructor(private engine: RenderEngine) {
-    this.el = document.getElementById('surface-panel')!;
+    this.el = document.getElementById('surface-tree-list')!;
+    this.bindCreationTools();
+    if (!this.el) return;
     this.render();
 
     store.bus.on('SURFACE_ADDED',   () => this.render());
@@ -16,6 +18,22 @@ export class SurfacePanel {
     store.bus.on('SURFACE_UPDATED', () => this.render());
     store.bus.on('PROJECT_LOADED',  () => this.render());
     store.bus.on('UI_STATE_CHANGED', () => this.highlightSelected());
+  }
+
+  private bindCreationTools() {
+    document.getElementById('tool-quad')?.addEventListener('click', () => this.createSurface('quad'));
+    document.getElementById('tool-tri')?.addEventListener('click', () => this.createSurface('quad'));
+    document.getElementById('tool-circle')?.addEventListener('click', () => this.createSurface('quad'));
+    document.getElementById('tool-line')?.addEventListener('click', () => this.createSurface('quad'));
+    document.getElementById('tool-mesh')?.addEventListener('click', () => this.createSurface('mesh'));
+    document.getElementById('tool-3d')?.addEventListener('click', () => this.createSurface('model3d'));
+    document.getElementById('btn-add-surface')?.addEventListener('click', () => this.createSurface('quad'));
+  }
+
+  private createSurface(type: 'quad' | 'mesh' | 'model3d') {
+    history.push(store.project);
+    const s = store.addSurface({ type });
+    store.selectSurface(s.id);
   }
 
   private render() {

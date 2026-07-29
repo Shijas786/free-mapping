@@ -10,6 +10,7 @@ export class OutputPanel {
 
   constructor(private engine: RenderEngine) {
     this.el = document.getElementById('output-panel')!;
+    if (!this.el) return;
     this.render();
     store.bus.on('PROJECT_LOADED', () => this.render());
   }

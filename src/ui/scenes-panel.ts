@@ -8,6 +8,7 @@ export class ScenesPanel {
 
   constructor(private engine: RenderEngine) {
     this.el = document.getElementById('scenes-panel')!;
+    if (!this.el) return;
     this.render();
   }
 

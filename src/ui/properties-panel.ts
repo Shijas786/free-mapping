@@ -7,6 +7,7 @@ export class PropertiesPanel {
 
   constructor() {
     this.el = document.getElementById('properties-panel')!;
+    if (!this.el) return;
     this.render();
 
     store.bus.on('UI_STATE_CHANGED',  () => this.render());

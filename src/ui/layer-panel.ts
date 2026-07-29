@@ -12,6 +12,7 @@ export class LayerPanel {
 
   constructor(private engine: RenderEngine) {
     this.el = document.getElementById('layer-panel')!;
+    if (!this.el) return;
     this.render();
 
     store.bus.on('LAYER_ADDED',     () => this.render());
