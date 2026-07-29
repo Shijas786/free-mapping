@@ -5,6 +5,7 @@ import { saveProject, loadProject, exportJSON, importJSON } from '../core/idb';
 import { sceneManager } from '../scenes/manager';
 import type { RenderEngine } from '../render/engine';
 import { DEFAULT_MEDIA_ITEMS } from './media-bin';
+import { showToast } from './toast';
 
 export function bindAllAppControls(engine: RenderEngine) {
   const $ = (id: string) => document.getElementById(id);
@@ -16,15 +17,17 @@ export function bindAllAppControls(engine: RenderEngine) {
     surfaces.forEach((s) => store.removeSurface(s.id));
     const s = store.addSurface({ type: 'quad' });
     store.selectSurface(s.id);
+    showToast('New project created', 'info');
   });
 
   $('menu-save')?.addEventListener('click', async () => {
     await saveProject(store.project);
-    alert('Project saved successfully!');
+    showToast('Project saved successfully!', 'success');
   });
 
   $('menu-export')?.addEventListener('click', () => {
     exportJSON(store.project);
+    showToast('Exported project JSON', 'info');
   });
 
   $('menu-import')?.addEventListener('click', async () => {
@@ -33,10 +36,11 @@ export function bindAllAppControls(engine: RenderEngine) {
       const ok = store.deserialize(json);
       if (ok) {
         await engine.loadAllMedia();
-        alert('Project imported!');
+        showToast('Project imported successfully!', 'success');
       }
     } catch (err) {
       console.error('Import failed', err);
+      showToast('Failed to import project file', 'error');
     }
   });
 
@@ -120,7 +124,7 @@ export function bindAllAppControls(engine: RenderEngine) {
 
   $('btn-save')?.addEventListener('click', async () => {
     await saveProject(store.project);
-    alert('Project saved!');
+    showToast('Project saved!', 'success');
   });
 
   $('btn-fullscreen-out')?.addEventListener('click', () => {

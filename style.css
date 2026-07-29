@@ -782,3 +782,102 @@ canvas {
   border-radius: 3px;
   max-width: 70px;
 }
+
+/* ── Toast Notifications ────────────────────────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  bottom: 48px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.toast-item {
+  background: var(--clr-surface-elevated, #1e1e24);
+  border: 1px solid var(--clr-border, #33333f);
+  color: var(--clr-text, #f1f5f9);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+  transform: translateY(20px) scale(0.95);
+  opacity: 0;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  pointer-events: auto;
+}
+.toast-item.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.toast-success { border-left: 3px solid #10b981; }
+.toast-info    { border-left: 3px solid #6366f1; }
+.toast-warn    { border-left: 3px solid #f59e0b; }
+.toast-error   { border-left: 3px solid #ef4444; }
+.toast-icon    { font-size: 14px; }
+.toast-message { font-weight: 500; line-height: 1.3; }
+
+/* ── Canvas Drag & Drop Overlay ─────────────────────────────────────────────── */
+.drag-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 15, 25, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  border: 2px dashed var(--clr-accent, #6366f1);
+  border-radius: 8px;
+  margin: 8px;
+}
+.drag-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.drag-overlay-card {
+  text-align: center;
+  background: rgba(30, 30, 45, 0.9);
+  padding: 24px 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  transform: scale(0.95);
+  transition: transform 0.2s ease;
+}
+.drag-overlay.active .drag-overlay-card {
+  transform: scale(1);
+}
+.drag-icon { font-size: 40px; margin-bottom: 8px; }
+.drag-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.drag-sub { font-size: 11px; color: var(--clr-text-muted, #94a3b8); }
+
+/* ── Context Status Bar & Hints ──────────────────────────────────────────────── */
+.stage-hint-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 12px;
+  background: rgba(10, 10, 15, 0.8);
+  border-top: 1px solid var(--clr-border);
+  font-size: 10.5px;
+  color: var(--clr-text-muted);
+}
+.stage-hint-item { display: flex; align-items: center; gap: 4px; }
+.stage-hint-kbd {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--clr-text);
+}

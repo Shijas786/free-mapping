@@ -24,6 +24,8 @@ import { MediaBinPanel } from './ui/media-bin';
 import { InputsPanel } from './ui/inputs-panel';
 import { bindAllAppControls } from './ui/app-binder';
 
+import { setupDragAndDrop, showToast } from './ui/toast';
+
 async function main() {
   // ── Restore autosaved project ──────────────────────────────────────────────
   const saved = await loadProject();
@@ -45,6 +47,37 @@ async function main() {
   new ResizeObserver(resizeCanvas).observe(stageEl);
 
   await engine.loadAllMedia();
+
+  // ── Drag & Drop File Upload onto Stage ─────────────────────────────────────
+  setupDragAndDrop(stageEl, async (file) => {
+    const isVideo = file.type.startsWith('video/');
+    const url = URL.createObjectURL(file);
+
+    let surfId = store.ui.selectedSurfaceId;
+    if (!surfId && store.project.surfaces.length > 0) {
+      surfId = store.project.surfaces[0].id;
+    }
+    if (!surfId) {
+      const newSurf = store.addSurface({ type: 'quad' });
+      surfId = newSurf.id;
+    }
+
+    let layers = store.getLayers(surfId);
+    let targetLayer = layers[0];
+    if (!targetLayer) {
+      targetLayer = store.addLayer({ surfaceId: surfId });
+    }
+
+    history.push(store.project);
+    store.updateLayer({
+      ...targetLayer,
+      source: {
+        type: isVideo ? 'video' : 'image',
+        url,
+      },
+    });
+    await engine.loadMediaForLayer(targetLayer.id);
+  });
 
   // ── SVG Overlay ───────────────────────────────────────────────────────────
   const overlayEl = document.getElementById('stage-overlay')!;
