@@ -1,19 +1,19 @@
-/* ── WebMapper Pro — Premium Dark Glassmorphic Design System ──────────────── */
+/* ── WebMapper Pro — High-Contrast Dark Slate Design System (MadMapper Style) ─ */
 :root {
-  --clr-bg: #090a0e;
-  --clr-surface: #12141c;
-  --clr-surface-card: #181a24;
-  --clr-surface-hover: #202434;
-  --clr-border: rgba(255, 255, 255, 0.08);
-  --clr-border-glow: rgba(0, 229, 255, 0.3);
+  --clr-bg: #0e0e11;               /* Deep Stage Black */
+  --clr-surface: #17171c;          /* Panel Dark Slate */
+  --clr-surface-card: #202028;     /* Card & Header Dark Grey */
+  --clr-surface-hover: #2a2a34;    /* Active Hover */
+  --clr-border: #2c2c36;           /* Crisp Panel Border */
+  --clr-border-glow: rgba(255, 144, 0, 0.4);
   
-  --clr-accent: #00e5ff;          /* Electric Cyan */
+  --clr-accent: #00e5ff;          /* Electric Cyan / Bright White */
+  --clr-accent-orange: #ff9000;   /* MadMapper Signature Orange */
   --clr-accent-indigo: #6366f1;   /* Indigo */
-  --clr-accent-pink: #ec4899;     /* Pink */
-  --clr-danger: #f43f5e;
+  --clr-danger: #ef4444;
   
-  --clr-text: #f1f5f9;
-  --clr-text-muted: #94a3b8;
+  --clr-text: #f8fafc;            /* Crisp High-Contrast White */
+  --clr-text-muted: #94a3b8;      /* Neutral Slate */
   
   --font-ui: 'Inter', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -480,31 +480,36 @@ canvas {
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-/* ── Left Panel Tab Bar ─────────────────────────────────────────────────────── */
+/* ── Left & Right Panel Tab Bars (MadMapper Style) ─────────────────────────── */
 .left-panel-tabs, .right-panel-tabs {
   display: flex;
-  background: #0a0b10;
+  background: #101014;
   border-bottom: 1px solid var(--clr-border);
   flex-shrink: 0;
 }
 .lp-tab, .rp-tab {
   flex: 1;
-  padding: 7px 0;
-  background: transparent;
+  padding: 8px 0;
+  background: #141418;
   border: none;
-  color: var(--clr-text-muted);
+  color: #8e8ea0;
   font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: all 0.15s;
-  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  border-top: 2px solid transparent;
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
 }
-.lp-tab:hover, .rp-tab:hover { color: var(--clr-text); }
+.lp-tab:hover, .rp-tab:hover {
+  color: #ffffff;
+  background: #1a1a20;
+}
 .lp-tab.active, .rp-tab.active {
-  color: var(--clr-accent);
-  border-bottom-color: var(--clr-accent);
-  background: rgba(0,229,255,0.04);
+  color: #ffffff;
+  border-top-color: var(--clr-accent-orange);
+  background: #202028;
+  font-weight: 800;
 }
 
 /* ── Left Sub-panels ─────────────────────────────────────────────────────────── */
